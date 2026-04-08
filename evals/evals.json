@@ -1,0 +1,23 @@
+{
+  "skill_name": "creating-scenarios",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Create a job simulation for a junior software engineer role at a mid-size B2B SaaS company. The role involves writing backend code, doing code reviews, and working with product managers. I want something I can use to evaluate candidates in our hiring pipeline.",
+      "expected_output": "A single .md file with a fictional company background, 3 connected scenarios escalating from easy (e.g. fix a bug using a clear ticket) to hard (e.g. production outage with a simultaneous feature deadline that creates interconnected pressure). Total time should be 20–30 minutes. Each scenario has a 0–10 numeric rubric with evidence-citing requirements, and the document ends with a grading summary table that sums to a total score with percentage-based hiring thresholds (Strong Hire / Hire / Lean No Hire / No Hire). No 'Key Signals to Watch For' sections. Maximum 2 characters per scene. Every rubric criterion must be explicitly asked for in the task instructions.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "I need a candidate assessment for a customer success manager position. We're a Series B healthtech startup with about 200 employees. Our CSMs handle enterprise hospital clients. Build me the simulation scenarios.",
+      "expected_output": "A single .md file set in a fictional healthtech startup, 3 connected scenarios escalating in difficulty around client onboarding, escalations, and retention. Total time should be 20–30 minutes. Each scenario uses a 0–10 numeric rubric where every grading comment must cite specific evidence from the candidate's response (with good/bad examples included in the rubric instructions). The final scenario should involve interconnected crises where solving one helps solve the other. Grading summary table with total score, percentage, and hiring recommendation. JSON output format specified for the AI grader.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Build a hiring simulation for an HR recruiter. I want to test how candidates handle sourcing, screening, coordination, and tricky situations like offer negotiations or candidate ghosting.",
+      "expected_output": "A single .md file with a fictional company, 3 connected recruiting scenarios that progress from straightforward (screen a resume) to complex (competing offers with a hiring manager conflict that connects to the earlier screening decision). Total time should be 20–30 minutes. Rubrics use a 0–10 numeric scale with 4 bands (9–10, 7–8, 4–6, 0–3). Tasks should only ask for deliverables that are scored — no extra busywork. Maximum 2 characters per scene to minimize cognitive overhead. No duplicate guidance sections. Grading summary sums to a total with percentage-based hiring thresholds.",
+      "files": []
+    }
+  ]
+}
