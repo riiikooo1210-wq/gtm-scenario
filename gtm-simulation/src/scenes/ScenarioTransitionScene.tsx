@@ -10,6 +10,7 @@ interface Props { node: GtmNode }
 export default function ScenarioTransitionScene({ node }: Props) {
   const navigateTo = useGameStore((s) => s.navigateTo)
   const setCurrentScenario = useGameStore((s) => s.setCurrentScenario)
+  const topAccount = useGameStore((s) => s.accounts[0]?.name?.trim() || 'your top-priority account')
 
   const nextScenario = (node.scenario + 1) as 1 | 2 | 3
 
@@ -46,7 +47,7 @@ export default function ScenarioTransitionScene({ node }: Props) {
         <h2 style={{ fontSize: '1.25rem', fontWeight: 700 }}>{node.title}</h2>
 
         <p style={{ fontSize: '0.875rem', lineHeight: 1.7, color: '#333', maxWidth: '600px', margin: '0 auto' }}>
-          {node.content}
+          {node.content.replace('{{TOP_ACCOUNT}}', topAccount)}
         </p>
 
         <ActionButton text={`Continue to Scenario ${nextScenario}`} onClick={handleContinue} />

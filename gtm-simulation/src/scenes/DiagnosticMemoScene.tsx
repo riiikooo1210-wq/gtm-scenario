@@ -20,6 +20,7 @@ export default function DiagnosticMemoScene({ node }: Props) {
   const addRootCause = useGameStore((s) => s.addRootCause)
   const removeRootCause = useGameStore((s) => s.removeRootCause)
   const isSubmitted = useGameStore((s) => s.scenariosSubmitted.includes(2))
+  const playerName = useGameStore((s) => s.playerName)
   const [drawerOpen, setDrawerOpen] = useState(false)
 
   const filledCount = rootCauses.filter(
@@ -71,7 +72,7 @@ export default function DiagnosticMemoScene({ node }: Props) {
               </div>
               <div style={{ display: 'flex', gap: '0.5rem', fontSize: '0.8125rem', padding: '0.25rem 0' }}>
                 <span style={{ color: '#999', fontWeight: 500, width: '50px' }}>From:</span>
-                <span style={{ color: '#000' }}>You (GTM Manager)</span>
+                <span style={{ color: '#000' }}>{playerName || 'You'} (GTM Manager)</span>
               </div>
               <div style={{ display: 'flex', gap: '0.5rem', fontSize: '0.8125rem', padding: '0.25rem 0' }}>
                 <span style={{ color: '#999', fontWeight: 500, width: '50px' }}>Re:</span>

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, createContext, useContext, useCallback } from 'react'
+import { useState, useRef, useEffect, createContext } from 'react'
 import { glossary } from '../../data/glossary'
 import { useGameStore } from '../../store/gameStore'
 
@@ -25,13 +25,9 @@ export default function JargonTerm({ term, children }: JargonTermProps) {
   const ref = useRef<HTMLSpanElement>(null)
   const tooltipRef = useRef<HTMLDivElement>(null)
   const trackDefinitionClick = useGameStore((s) => s.trackDefinitionClick)
-  const seenTerms = useContext(JargonSeenContext)
 
   const definition = glossary[term]
   if (!definition) return <>{children || term}</>
-
-  const isFirstOccurrence = !seenTerms.has(term)
-  if (isFirstOccurrence) seenTerms.add(term)
 
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -58,8 +54,7 @@ export default function JargonTerm({ term, children }: JargonTermProps) {
   return (
     <span ref={ref} style={{ position: 'relative', display: 'inline' }}>
       {children || term}
-      {isFirstOccurrence && (
-        <span
+      <span
           onClick={handleClick}
           style={{
             display: 'inline-flex',
@@ -83,8 +78,7 @@ export default function JargonTerm({ term, children }: JargonTermProps) {
           title={`What is ${term}?`}
         >
           ?
-        </span>
-      )}
+      </span>
       {isOpen && (
         <div
           ref={tooltipRef}

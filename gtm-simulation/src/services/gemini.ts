@@ -5,6 +5,7 @@ import simulationDoc from '@scenarios/gtm-manager-enterprise-security-simulation
 const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent'
 
 interface CandidateResponses {
+  playerName: string
   // Scenario 1
   prioritizationCriteria: string
   accounts: AccountEntry[]
@@ -33,7 +34,7 @@ function formatResponses(r: CandidateResponses): string {
   // Scenario 2
   text += '=== SCENARIO 2: DIAGNOSTIC MEMO ===\n\n'
   text += 'To: Dana Moretti, VP of Enterprise Sales\n'
-  text += 'From: GTM Manager\n'
+  text += `From: ${r.playerName || 'GTM Manager'}\n`
   text += 'Re: Enterprise Pipeline Diagnostic & 2-Week Action Plan\n\n'
   r.rootCauses.forEach((rc, i) => {
     if (rc.title.trim()) {

@@ -3,6 +3,7 @@ import { persist } from 'zustand/middleware'
 import type { AccountEntry, RootCauseEntry, GradingResult } from '../types/game'
 
 interface GtmGameState {
+  playerName: string
   currentNodeId: string
   visitedNodes: string[]
   currentScenario: 0 | 1 | 2 | 3
@@ -38,6 +39,8 @@ interface GtmGameState {
   setCurrentScenario: (s: 0 | 1 | 2 | 3) => void
   markScenarioSubmitted: (s: number) => void
 
+  setPlayerName: (name: string) => void
+
   // Scenario 1 setters
   setPrioritizationCriteria: (text: string) => void
   setAccount: (index: number, field: keyof AccountEntry, value: string) => void
@@ -71,6 +74,7 @@ const emptyAccount = (): AccountEntry => ({ name: '', rationale: '', contact: ''
 const emptyRootCause = (): RootCauseEntry => ({ title: '', explanation: '', actions: '' })
 
 const initialState = {
+  playerName: '',
   currentNodeId: 'intro',
   visitedNodes: ['intro'],
   currentScenario: 0 as 0 | 1 | 2 | 3,
@@ -124,6 +128,8 @@ export const useGameStore = create<GtmGameState>()(
             : [...state.scenariosSubmitted, s],
         })),
 
+      setPlayerName: (name) => set({ playerName: name }),
+
       setPrioritizationCriteria: (text) => set({ prioritizationCriteria: text }),
 
       setAccount: (index, field, value) =>
@@ -169,7 +175,7 @@ export const useGameStore = create<GtmGameState>()(
 
       setGradingStatus: (status) => set({ gradingStatus: status }),
       setGradingResult: (result) => set({ gradingResult: result, gradingStatus: 'complete' }),
-      setGradingError: (error) => set({ gradingError: error, gradingStatus: 'error' }),
+      setGradingError: (error) => set(error != null ? { gradingError: error, gradingStatus: 'error' } : { gradingError: null }),
 
       resetGame: () => set(initialState),
     }),

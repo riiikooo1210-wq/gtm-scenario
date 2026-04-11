@@ -74,7 +74,7 @@ export default function DanaBriefScene({ node }: Props) {
           <strong style={{ color: '#c0392b' }}>Maximum 150 words.</strong>
         </p>
 
-        <LaptopFrame variant="slack" title="Direct Message | Dana Moretti">
+        <LaptopFrame variant="slack" title="Dana Moretti (direct message)">
           <SlackCompose
             channel="Dana Moretti"
             value={danaBrief}

@@ -100,11 +100,15 @@ function InlineIllustration({ src }: { src: string }) {
 /** Scenario 2 sequential briefing sub-step view */
 function S2SequentialBriefing({ node }: { node: GtmNode }) {
   const navigateTo = useGameStore((s) => s.navigateTo)
+  const topAccount = useGameStore((s) => s.accounts[0]?.name?.trim() || 'your top-priority account')
   const [subStep, setSubStep] = useState(0)
   const [showData, setShowData] = useState(false)
   useScrollToTopOnChange(subStep)
 
-  const quotes = node.quotes || []
+  const quotes = (node.quotes || []).map((q) => ({
+    ...q,
+    text: q.text.replace('{{TOP_ACCOUNT}}', topAccount),
+  }))
   const metrics = node.metrics || []
 
   // Per-sub-step background images
@@ -112,7 +116,7 @@ function S2SequentialBriefing({ node }: { node: GtmNode }) {
     '/pipeline.jpg',  // subStep 0: metrics table
     '/jordan.jpg',    // subStep 1: Jordan's quote
     '/dana.jpg',      // subStep 2: Dana's quote 1
-    '/dana.jpg',      // subStep 3: Dana's quote 2 (private)
+    '/dana_private.jpg',      // subStep 3: Dana's quote 2 (private)
   ]
 
   // Preload all illustrations on mount so swapping pages is instant
@@ -201,12 +205,7 @@ function S2SequentialBriefing({ node }: { node: GtmNode }) {
         </>
       )}
 
-      {/* Step indicator */}
-      <div style={{ fontSize: '0.6875rem', color: '#999', textAlign: 'center' }}>
-        {subStep + 1} of {totalSteps}
-      </div>
-
-      <div style={{ display: 'flex', gap: '0.75rem' }}>
+<div style={{ display: 'flex', gap: '0.75rem' }}>
         {subStep > 0 && (
           <ActionButton text="Back" onClick={() => setSubStep(subStep - 1)} variant="secondary" />
         )}
@@ -221,7 +220,7 @@ function S2SequentialBriefing({ node }: { node: GtmNode }) {
 }
 
 /** Scenario 3 paginated briefing — split into 2 reversible pages */
-function S3PaginatedBriefing({ node }: { node: GtmNode }) {
+function S3PaginatedBriefing({ node, playerName }: { node: GtmNode; playerName: string }) {
   const navigateTo = useGameStore((s) => s.navigateTo)
   const [page, setPage] = useState(0)
 
@@ -253,7 +252,7 @@ function S3PaginatedBriefing({ node }: { node: GtmNode }) {
             <DesktopOverlay>
               <LaptopFrame variant="slack" title="#product-launches" scrollable fill>
                 {slackMessages.map((msg, i) => (
-                  <SlackMessageEnhanced key={i} message={msg} delay={i * 0.15} />
+                  <SlackMessageEnhanced key={i} message={{ ...msg, content: msg.content.replace('{{PLAYER_NAME}}', playerName || 'You') }} delay={i * 0.15} />
                 ))}
               </LaptopFrame>
             </DesktopOverlay>
@@ -277,7 +276,7 @@ function S3PaginatedBriefing({ node }: { node: GtmNode }) {
                     </div>
                     <div style={{ display: 'flex', gap: '0.5rem', fontSize: '0.8125rem', padding: '0.25rem 0' }}>
                       <span style={{ color: '#999', fontWeight: 500, width: '50px' }}>To:</span>
-                      <span style={{ color: '#000' }}>{emails[0].to}</span>
+                      <span style={{ color: '#000' }}>{(emails[0].to || '').replace('You', playerName || 'You')}</span>
                     </div>
                     <div style={{ display: 'flex', gap: '0.5rem', fontSize: '0.8125rem', padding: '0.25rem 0' }}>
                       <span style={{ color: '#999', fontWeight: 500, width: '50px' }}>Re:</span>
@@ -402,6 +401,7 @@ function QuoteCardWithAvatar({ quote }: { quote: QuoteData }) {
 
 export default function BriefingScene({ node }: Props) {
   const navigateTo = useGameStore((s) => s.navigateTo)
+  const playerName = useGameStore((s) => s.playerName)
   const diff = difficultyLabels[node.scenario] || { label: '', color: '#555' }
 
   const isS2 = node.id === 's2_briefing'
@@ -442,7 +442,7 @@ export default function BriefingScene({ node }: Props) {
         {isS2 ? (
           <S2SequentialBriefing node={node} />
         ) : isS3 ? (
-          <S3PaginatedBriefing node={node} />
+          <S3PaginatedBriefing node={node} playerName={playerName} />
         ) : (
           <>
             <p style={{ fontSize: '0.875rem', lineHeight: 1.7, color: '#000' }}>
@@ -454,7 +454,7 @@ export default function BriefingScene({ node }: Props) {
               <DesktopOverlay>
                 <LaptopFrame variant="slack" title="Slack" scrollable fill>
                   {node.slackMessages.map((msg, i) => (
-                    <SlackMessageEnhanced key={i} message={msg} delay={i * 0.15} />
+                    <SlackMessageEnhanced key={i} message={{ ...msg, content: msg.content.replace('{{PLAYER_NAME}}', playerName || 'you') }} delay={i * 0.15} />
                   ))}
                 </LaptopFrame>
               </DesktopOverlay>

@@ -28,7 +28,7 @@ export const gtmStoryline: GtmStoryline = {
           sender: 'Dana Moretti',
           role: 'VP of Enterprise Sales',
           timestamp: '9:14 AM',
-          content: `Hey — welcome aboard! I need something from you by end of day Wednesday. We're kicking off our first enterprise prospecting sprint next week and I need a target account list. We want to start with 5 accounts that make sense for our first enterprise deals. Think Fortune 1000 companies where we have a realistic shot at getting in the door within 6 months.
+          content: `Hey {{PLAYER_NAME}} — welcome aboard! I need something from you by end of day Wednesday. We're kicking off our first enterprise prospecting sprint next week and I need a target account list. We want to start with 5 accounts that make sense for our first enterprise deals. Think Fortune 1000 companies where we have a realistic shot at getting in the door within 6 months.
 
 Here's what we know:
 • Our sweet spot has been companies going through cloud migrations or multi-cloud expansions — that's when security posture becomes a fire drill
@@ -47,7 +47,7 @@ Don't just give me a list of big logos. I want your reasoning for each pick — 
       type: 'account_list',
       scenario: 1,
       title: 'Your Target Account List',
-      content: 'Create your target account list of 5 enterprise companies. Organize the list in priority order (best opportunities first). At the top, briefly explain the criteria you used to prioritize.',
+      content: 'Create your target account list of 5 enterprise companies. List them in order of importance — your #1 pick should be the account you believe is the strongest opportunity. At the top, briefly explain the criteria you used to prioritize.',
       next: 's1_s2_transition',
     },
 
@@ -56,7 +56,7 @@ Don't just give me a list of big logos. I want your reasoning for each pick — 
       type: 'scenario_transition',
       scenario: 1,
       title: 'Week 1 Complete',
-      content: "Your target account list has been submitted. The enterprise prospecting sprint has launched using your recommendations. It's the end of your first week — Dana is pulling you into a pipeline review.",
+      content: "Your target account list has been submitted. The enterprise prospecting sprint has launched with {{TOP_ACCOUNT}} as your top-priority target. It's the end of your first week — Dana is pulling you into a pipeline review.",
       next: 's2_briefing',
     },
 
@@ -80,7 +80,7 @@ Don't just give me a list of big logos. I want your reasoning for each pick — 
         {
           speaker: 'Jordan Park',
           role: 'SDR Team Lead',
-          text: "My SDRs are burning through the account list. The messaging templates we brought over from mid-market are getting us flagged as spam by enterprise email filters. Half the contacts we're reaching out to aren't the right persona — we're hitting IT Directors, not security leaders. And the AEs are telling me they're spending 45 minutes on discovery calls just explaining what cloud security posture management even is. These enterprise prospects don't know the category.",
+          text: "We started outreach to {{TOP_ACCOUNT}} first like you prioritized, but the contacts we pulled aren't the right persona — we're hitting IT Directors, not security leaders. The messaging templates we brought over from mid-market are getting us flagged as spam by enterprise email filters. And the AEs are telling me they're spending 45 minutes on discovery calls just explaining what cloud security posture management even is. These enterprise prospects don't know the category.",
         },
         {
           speaker: 'Dana Moretti',
@@ -110,7 +110,7 @@ Don't just give me a list of big logos. I want your reasoning for each pick — 
       type: 'scenario_transition',
       scenario: 2,
       title: 'End of Week 1',
-      content: "Your diagnostic memo has been submitted. Your quick wins are starting to show results — the SDR team paused the old templates and you helped rewrite the outreach with compliance-led messaging. Response rates ticked up to 7% in the last 4 days. Then two things hit before 10 AM on Friday of your second week...",
+      content: "Your diagnostic memo has been submitted. Your quick wins are starting to show results — the SDR team paused the old templates and you helped rewrite the outreach with compliance-led messaging. Response rates ticked up to 7% in the last 4 days, and {{TOP_ACCOUNT}} responded to the rewritten outreach — an intro call is scheduled for next week. Then two things hit before 10 AM on Friday of your second week...",
       next: 's3_briefing',
     },
 
@@ -151,7 +151,7 @@ Don't just give me a list of big logos. I want your reasoning for each pick — 
           sender: 'Dana Moretti',
           role: 'VP of Enterprise Sales',
           timestamp: '(direct message)',
-          content: "You're in charge of both. Triage, prioritize, and execute. Brief me when I land.",
+          content: "{{PLAYER_NAME}}, you're in charge of both. Triage, prioritize, and execute. Brief me when I land.",
         },
       ],
       next: 's3_response',

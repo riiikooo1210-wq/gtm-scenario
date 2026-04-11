@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import SceneWrapper from '../components/layout/SceneWrapper'
 import ActionButton from '../components/ui/ActionButton'
@@ -25,12 +25,15 @@ export default function GradingScene({ node }: Props) {
   const coltonRescuePlan = useGameStore((s) => s.coltonRescuePlan)
   const fedRampHandling = useGameStore((s) => s.fedRampHandling)
   const danaBrief = useGameStore((s) => s.danaBrief)
+  const playerName = useGameStore((s) => s.playerName)
+  const hasStarted = useRef(false)
 
   const startGrading = async () => {
     setGradingStatus('loading')
     setGradingError(null)
     try {
       const result = await gradeResponses({
+        playerName,
         prioritizationCriteria,
         accounts,
         rootCauses,
@@ -46,10 +49,14 @@ export default function GradingScene({ node }: Props) {
   }
 
   useEffect(() => {
-    if (gradingStatus === 'idle') {
+    if (!hasStarted.current && gradingStatus !== 'complete') {
+      hasStarted.current = true
       startGrading()
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Treat any non-complete, non-error status as loading (covers idle and stale persisted states)
+  const showLoading = gradingStatus === 'loading' || gradingStatus === 'idle'
 
   return (
     <SceneWrapper>
@@ -59,7 +66,7 @@ export default function GradingScene({ node }: Props) {
         transition={{ duration: 0.4 }}
         style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', textAlign: 'center', padding: '2rem 0' }}
       >
-        {gradingStatus === 'loading' && (
+        {showLoading && (
           <>
             <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>
               <motion.span
@@ -94,7 +101,7 @@ export default function GradingScene({ node }: Props) {
 
         {gradingStatus === 'error' && (
           <>
-            <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#c0392b' }}>Grading Error</h2>
+            <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#c0392b' }}>Assessment Unavailable</h2>
             <p style={{ fontSize: '0.875rem', color: '#555', lineHeight: 1.6 }}>
               {gradingError}
             </p>

@@ -80,7 +80,16 @@ const steps = [
 export default function IntroScene({ node }: Props) {
   const navigateTo = useGameStore((s) => s.navigateTo)
   const setCurrentScenario = useGameStore((s) => s.setCurrentScenario)
+  const playerName = useGameStore((s) => s.playerName)
+  const setPlayerName = useGameStore((s) => s.setPlayerName)
   const [step, setStep] = useState(0)
+  const [nameEntered, setNameEntered] = useState(playerName.trim().length > 0)
+
+  const handleNameSubmit = () => {
+    if (playerName.trim().length > 0) {
+      setNameEntered(true)
+    }
+  }
 
   const handleStart = () => {
     setCurrentScenario(1)
@@ -88,6 +97,72 @@ export default function IntroScene({ node }: Props) {
   }
 
   const isLastStep = step === steps.length - 1
+
+  // Name input screen (shown before the steps)
+  if (!nameEntered) {
+    return (
+      <SceneWrapper illustration={node.illustration} hideIllustration>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4 }}
+          style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}
+        >
+          <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#000', lineHeight: 1.2 }}>
+            GTM Manager Simulation
+          </h1>
+          <p style={{ fontSize: '0.8125rem', color: '#555', lineHeight: 1.3, fontStyle: 'italic' }}>
+            Enterprise Security — Vantage Shield
+          </p>
+
+          {node.illustration && (
+            <div style={{ width: 'calc(100% + 6rem)', marginLeft: '-3rem', marginRight: '-3rem', overflow: 'hidden', borderTop: '1px solid #000', borderBottom: '1px solid #000' }}>
+              <img src={node.illustration} alt="" style={{ width: '100%', display: 'block' }} />
+            </div>
+          )}
+
+          <div
+            style={{
+              border: '1px solid #000',
+              boxShadow: '4px 4px 0 #000',
+              backgroundColor: '#F2EBD9',
+              padding: '1.5rem',
+            }}
+          >
+            <h2 style={{ fontSize: '1.125rem', fontWeight: 700, marginBottom: '0.75rem' }}>What should we call you?</h2>
+            <p style={{ fontSize: '0.875rem', lineHeight: 1.7, marginBottom: '1rem', color: '#333' }}>
+              Enter the name you'd like to go by in this office.
+            </p>
+            <input
+              type="text"
+              value={playerName}
+              onChange={(e) => setPlayerName(e.target.value)}
+              onKeyDown={(e) => { if (e.key === 'Enter') handleNameSubmit() }}
+              placeholder="Your name"
+              autoFocus
+              style={{
+                width: '100%',
+                padding: '0.625rem 0.75rem',
+                fontSize: '0.9375rem',
+                fontFamily: 'Inter, system-ui, sans-serif',
+                border: '1px solid #000',
+                backgroundColor: '#fff',
+                color: '#000',
+                outline: 'none',
+                boxSizing: 'border-box',
+              }}
+            />
+          </div>
+
+          <ActionButton
+            text="Continue"
+            onClick={handleNameSubmit}
+            variant={playerName.trim().length > 0 ? 'primary' : 'secondary'}
+          />
+        </motion.div>
+      </SceneWrapper>
+    )
+  }
 
   return (
     <SceneWrapper illustration={node.illustration} hideIllustration>
